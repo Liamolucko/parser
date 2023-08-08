@@ -42,17 +42,14 @@ function removeUnlessContent($node, $, weight) {
 
     const density = linkDensity($node);
 
-    // Too high of link density, is probably a menu or
-    // something similar.
-    // console.log(weight, density, contentLength)
-    if (weight < 25 && density > 0.2 && contentLength > 75) {
-      $node.remove();
-      return;
-    }
-
-    // Too high of a link density, despite the score being
-    // high.
-    if (weight >= 25 && density > 0.5) {
+    // Too high of a link density, this is probably a menu
+    // or something similar.
+    // The density threshold is lower if the node has a low
+    // weight.
+    if (
+      (weight < 25 && density > 0.2 && contentLength > 75) ||
+      (weight >= 25 && density > 0.5)
+    ) {
       // Don't remove the node if it's a list and the
       // previous sibling starts with a colon though. That
       // means it's probably content.

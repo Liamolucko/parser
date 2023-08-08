@@ -235,6 +235,29 @@ describe('cleanTags($)', () => {
     assertClean(result.html(), html);
   });
 
+  it('keeps node with a bad score and link density > 0.2 if preceding text ends in colon', () => {
+    const html = `
+      <div score="40">
+        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu.</p>
+        <p>Now read these links: </p>
+        <ul score="5">
+          <li><a href="#">Lose this one</a></li>
+          <li><a href="#">Lose this one</a></li>
+          <li><a href="#">Lose this one</a></li>
+          <li><a href="#">Lose this one</a></li>
+          <li><a href="#">Lose this one</a></li>
+          <li><a href="#">Lose this one</a></li>
+          <li><a href="#">Lose this one</a></li>
+          <li><a href="#">Lose this one</a></li>
+        </ul>
+      </div>
+    `;
+    const $ = cheerio.load(html);
+
+    const result = cleanTags($('*').first(), $);
+    assertClean(result.html(), html);
+  });
+
   it('keeps anything with a class of entry-content-asset', () => {
     const html = `
       <div score="100">
